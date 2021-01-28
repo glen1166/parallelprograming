@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ParallelPrograming
 {
@@ -6,7 +8,16 @@ namespace ParallelPrograming
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+		var data = ReadTask();
+		Console.WriteLine("main thread");
+		Console.WriteLine(data.Result);
         }
+	
+	public static Task<int> ReadTask()
+	{
+	    var tcs = new TaskCompletionSource<int>();
+	    Task.Delay(5000).ContinueWith(task => tcs.SetResult(111));
+	    return tcs.Task;
+	}
     }
 }
